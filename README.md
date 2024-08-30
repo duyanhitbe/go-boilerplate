@@ -14,7 +14,7 @@ go mod init
 touch .env
 ```
 
-Paste there env to .env file
+Paste these to your .env file
 
 ```
 PORT=3000
