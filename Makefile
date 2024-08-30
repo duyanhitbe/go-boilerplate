@@ -4,6 +4,8 @@ build:
 	@go build -o bin/golang-boilerplate cmd/api/main.go
 run: build
 	@./bin/golang-boilerplate
+unit-test:
+	@godotenv -f .env.test go test ./...
 sqlc:
 	@sqlc generate
 migrate:

@@ -1,0 +1,19 @@
+package configs
+
+import (
+	"os"
+	"strconv"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+func Test_InitEnv(t *testing.T) {
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	dbUrl := os.Getenv("DB_URL")
+
+	env := InitEnv()
+
+	require.Equal(t, env.Port, port)
+	require.Equal(t, env.DbUrl, dbUrl)
+}

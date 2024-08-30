@@ -9,6 +9,33 @@ import (
 	"context"
 )
 
+const createTodo = `-- name: CreateTodo :one
+INSERT INTO "todos" ("title")
+VALUES ($1)
+RETURNING id, title, "createdAt", "updatedAt"
+`
+
+func (q *Queries) CreateTodo(ctx context.Context, title string) (*Todo, error) {
+	row := q.db.QueryRowContext(ctx, createTodo, title)
+	var i Todo
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return &i, err
+}
+
+const deleteAllTodo = `-- name: DeleteAllTodo :exec
+DELETE FROM "todos"
+`
+
+func (q *Queries) DeleteAllTodo(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, deleteAllTodo)
+	return err
+}
+
 const getAllTodo = `-- name: GetAllTodo :many
 SELECT id, title, "createdAt", "updatedAt" FROM "todos"
 `

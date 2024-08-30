@@ -9,6 +9,8 @@ import (
 )
 
 type Querier interface {
+	CreateTodo(ctx context.Context, title string) (*Todo, error)
+	DeleteAllTodo(ctx context.Context) error
 	GetAllTodo(ctx context.Context) ([]*Todo, error)
 }
 
