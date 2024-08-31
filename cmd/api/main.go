@@ -5,7 +5,8 @@ import (
 	"log"
 
 	"github.com/duyanhitbe/go-boilerplate/internal/configs"
-	"github.com/duyanhitbe/go-boilerplate/internal/routes"
+	db "github.com/duyanhitbe/go-boilerplate/internal/database/generated"
+	"github.com/duyanhitbe/go-boilerplate/internal/server"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -19,14 +20,17 @@ func main() {
 	env := configs.InitEnv()
 
 	//open db connection
-	db, err := sql.Open("postgres", env.DbUrl)
+	conn, err := sql.Open("postgres", env.DbUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	//create sql store
+	store := db.NewSQLStore(conn)
+
 	//init API server
-	server := routes.NewServer(db)
-	if err = server.Start(env.Port); err != nil {
+	server := server.NewServer(env.Port, store)
+	if err = server.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
 }

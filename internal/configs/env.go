@@ -2,16 +2,15 @@ package configs
 
 import (
 	"os"
-	"strconv"
 )
 
 type Env struct {
-	Port  int
+	Port  string
 	DbUrl string
 }
 
 func InitEnv() *Env {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	port := os.Getenv("PORT")
 	dbUrl := os.Getenv("DB_URL")
 
 	return &Env{

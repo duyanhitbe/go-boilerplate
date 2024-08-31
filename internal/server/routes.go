@@ -1,4 +1,4 @@
-package routes
+package server
 
 import (
 	"net/http"
@@ -6,8 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) registerIndexRoutes(r *gin.Engine) {
-	//v1 group
+func (s *Server) RegisterRoutes() *gin.Engine {
+	r := gin.Default()
+
+	//v1
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/", func(ctx *gin.Context) {
@@ -17,5 +19,13 @@ func (s *Server) registerIndexRoutes(r *gin.Engine) {
 				"status":  "ok",
 			})
 		})
+
+		//todo endpoints
+		todo := r.Group("/todo")
+		{
+			todo.GET("/", s.GetAllTodo)
+		}
 	}
+
+	return r
 }
