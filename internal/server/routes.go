@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) RegisterRoutes() *gin.Engine {
+func (s *Server) router() *gin.Engine {
 	r := gin.Default()
 
 	//v1
@@ -14,16 +14,17 @@ func (s *Server) RegisterRoutes() *gin.Engine {
 	{
 		v1.GET("/", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
-				"message": "Todo app",
+				"message": "Go boilerplate",
 				"version": "1.0.0",
 				"status":  "ok",
 			})
 		})
 
-		//todo endpoints
-		todo := r.Group("/todo")
+		//auth endpoints
+		auth := v1.Group("/auth")
 		{
-			todo.GET("/", s.GetAllTodo)
+			auth.POST("/register", s.register)
+			auth.POST("/login", s.login)
 		}
 	}
 

@@ -5,14 +5,15 @@
 package db
 
 import (
-	"time"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
 
-type Todo struct {
-	ID        uuid.UUID `json:"id"`
-	Title     string    `json:"title"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+type User struct {
+	ID        uuid.UUID    `json:"id"`
+	Username  string       `json:"username"`
+	Password  string       `json:"password"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
 }
