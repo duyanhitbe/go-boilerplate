@@ -1,9 +1,8 @@
 package server
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func (s *Server) router() *gin.Engine {
@@ -12,13 +11,7 @@ func (s *Server) router() *gin.Engine {
 	//v1
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"message": "Go boilerplate",
-				"version": "1.0.0",
-				"status":  "ok",
-			})
-		})
+		v1.GET("/", s.index)
 
 		//auth endpoints
 		auth := v1.Group("/auth")
@@ -30,4 +23,12 @@ func (s *Server) router() *gin.Engine {
 	}
 
 	return r
+}
+
+func (s *Server) index(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Go boilerplate",
+		"version": "1.0.0",
+		"status":  "ok",
+	})
 }
