@@ -118,6 +118,12 @@ func (s *Server) login(c *gin.Context) {
 		return
 	}
 
+	if ok := s.h.Compare(req.Password, user.Password); !ok {
+		log.Error().Msg("Invalid password")
+		throwBadRequest(c, errors.New("invalid password"))
+		return
+	}
+
 	accessToken, err := s.t.Create(user.ID.String(), 24*time.Hour)
 	if err != nil {
 		log.Error().Msgf("Create accessToken fail %v", err)
@@ -125,6 +131,7 @@ func (s *Server) login(c *gin.Context) {
 		return
 	}
 	log.Trace().Msg("Create access token succeeded")
+
 	refreshToken, err := s.t.Create(user.ID.String(), 30*24*time.Hour)
 	if err != nil {
 		log.Error().Msgf("Create refreshToken fail %v", err)
@@ -140,4 +147,21 @@ func (s *Server) login(c *gin.Context) {
 		AccessToken:  accessToken.Token,
 		RefreshToken: refreshToken.Token,
 	})
+}
+
+func (s *Server) me(c *gin.Context) {
+	type user struct {
+		ID        uuid.UUID `json:"id"`
+		Username  string    `json:"username"`
+		CreatedAt time.Time `json:"created_at"`
+		UpdatedAt time.Time `json:"updated_at"`
+	}
+	if u, valid := s.getUserFromContext(c); valid {
+		ok(c, user{
+			ID:        u.ID,
+			Username:  u.Username,
+			CreatedAt: u.CreatedAt.Time,
+			UpdatedAt: u.UpdatedAt.Time,
+		})
+	}
 }

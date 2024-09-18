@@ -11,4 +11,5 @@ type Response struct {
 
 type Token interface {
 	Create(sub string, exp time.Duration) (*Response, error)
+	Verify(token string) (*Payload, error)
 }

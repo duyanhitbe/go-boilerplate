@@ -28,6 +28,14 @@ func throwValidationError(c *gin.Context, errs interface{}) {
 	})
 }
 
+func throwUnauthorized(c *gin.Context, err error) {
+	c.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse{
+		Status:  http.StatusUnauthorized,
+		Message: http.StatusText(http.StatusUnauthorized),
+		Error:   err.Error(),
+	})
+}
+
 func throwForbidden(c *gin.Context, err error) {
 	c.AbortWithStatusJSON(http.StatusForbidden, errorResponse{
 		Status:  http.StatusForbidden,

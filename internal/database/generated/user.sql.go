@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -72,6 +74,25 @@ func (q *Queries) FetchUser(ctx context.Context, arg FetchUserParams) ([]*User, 
 		return nil, err
 	}
 	return items, nil
+}
+
+const findOneUserById = `-- name: FindOneUserById :one
+SELECT id, username, password, created_at, updated_at
+FROM users
+WHERE id = $1
+`
+
+func (q *Queries) FindOneUserById(ctx context.Context, id uuid.UUID) (*User, error) {
+	row := q.db.QueryRowContext(ctx, findOneUserById, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return &i, err
 }
 
 const findOneUserByUsername = `-- name: FindOneUserByUsername :one

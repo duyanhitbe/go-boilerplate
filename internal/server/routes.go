@@ -25,6 +25,7 @@ func (s *Server) router() *gin.Engine {
 		{
 			auth.POST("/register", s.register)
 			auth.POST("/login", s.login)
+			auth.GET("/me", s.authenticationMiddleware, s.me)
 		}
 	}
 
