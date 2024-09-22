@@ -12,7 +12,6 @@ import (
 
 type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (*User, error)
-	FetchUser(ctx context.Context, arg FetchUserParams) ([]*User, error)
 	FindOneUserById(ctx context.Context, id uuid.UUID) (*User, error)
 	FindOneUserByUsername(ctx context.Context, username string) (*User, error)
 }

@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const iss = "https://github.com/duyanhitbe/go-boilerplate"
+
 type Payload struct {
 	jwt.RegisteredClaims
 	ExpireIn int64 `json:"expire_in"`
@@ -14,7 +16,6 @@ type Payload struct {
 func NewPayload(sub string, exp time.Duration) *Payload {
 	now := time.Now()
 	id, _ := uuid.NewUUID()
-	iss := "https://github.com/duyanhitbe/go-boilerplate"
 	return &Payload{
 		RegisteredClaims: jwt.RegisteredClaims{
 			ID:        id.String(),

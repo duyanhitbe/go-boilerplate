@@ -35,47 +35,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (*User, 
 	return &i, err
 }
 
-const fetchUser = `-- name: FetchUser :many
-SELECT id, username, password, created_at, updated_at
-FROM users
-LIMIT $1
-OFFSET $2
-`
-
-type FetchUserParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
-}
-
-func (q *Queries) FetchUser(ctx context.Context, arg FetchUserParams) ([]*User, error) {
-	rows, err := q.db.QueryContext(ctx, fetchUser, arg.Limit, arg.Offset)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []*User{}
-	for rows.Next() {
-		var i User
-		if err := rows.Scan(
-			&i.ID,
-			&i.Username,
-			&i.Password,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, &i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const findOneUserById = `-- name: FindOneUserById :one
 SELECT id, username, password, created_at, updated_at
 FROM users

@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_InitEnv(t *testing.T) {
+func TestInitEnv(t *testing.T) {
 	port := os.Getenv("PORT")
 	dbUrl := os.Getenv("DB_URL")
 
