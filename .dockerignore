@@ -1,0 +1,9 @@
+.env
+.idea
+.gitignore
+.dockerignore
+docker-compose.yaml
+Dockerfile
+Makefile
+README.md
+sqlc.yaml
