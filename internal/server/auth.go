@@ -3,12 +3,13 @@ package server
 import (
 	"database/sql"
 	"errors"
+	"time"
+
 	db "github.com/duyanhitbe/go-boilerplate/internal/database/generated"
 	"github.com/duyanhitbe/go-boilerplate/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
-	"time"
 )
 
 type registerRequest struct {
@@ -149,15 +150,16 @@ func (s *Server) login(c *gin.Context) {
 	})
 }
 
+type meResponse struct {
+	ID        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 func (s *Server) me(c *gin.Context) {
-	type user struct {
-		ID        uuid.UUID `json:"id"`
-		Username  string    `json:"username"`
-		CreatedAt time.Time `json:"created_at"`
-		UpdatedAt time.Time `json:"updated_at"`
-	}
 	if u, valid := s.getUserFromContext(c); valid {
-		ok(c, user{
+		ok(c, meResponse{
 			ID:        u.ID,
 			Username:  u.Username,
 			CreatedAt: u.CreatedAt.Time,

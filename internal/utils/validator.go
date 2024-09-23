@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-type validationError struct {
+type ValidationError struct {
 	Field   string `json:"field"`
 	Message string `json:"message"`
 }
@@ -16,17 +16,17 @@ func IsValidationError(err error) bool {
 	return errors.As(err, &ve)
 }
 
-func MakeValidationError(err error, model interface{}) []validationError {
+func MakeValidationError(err error, model interface{}) []ValidationError {
 	var ve validator.ValidationErrors
 	if errors.As(err, &ve) {
-		out := make([]validationError, len(ve))
+		out := make([]ValidationError, len(ve))
 		for i, fe := range ve {
 			fieldName := getJSONTag(model, fe.StructField())
-			out[i] = validationError{fieldName, msgForTag(fe.Tag())}
+			out[i] = ValidationError{fieldName, msgForTag(fe.Tag())}
 		}
 		return out
 	}
-	return []validationError{}
+	return []ValidationError{}
 }
 
 func msgForTag(tag string) string {
