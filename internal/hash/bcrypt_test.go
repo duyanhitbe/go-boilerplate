@@ -30,5 +30,7 @@ func TestCompare(t *testing.T) {
 	b, h := createHash(t)
 
 	valid := b.Compare(password, h)
-	require.Equal(t, true, valid)
+	notValid := b.Compare("wrong_password", h)
+	require.True(t, valid)
+	require.False(t, notValid)
 }
